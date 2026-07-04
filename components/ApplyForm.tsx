@@ -13,7 +13,7 @@ type Errors = { name?: string; phone?: string; consent?: string };
 
 /** 본문 최하단 신청 폼 (#apply-form) — 페이지 내 유일한 신청 폼 */
 export default function ApplyForm() {
-  const { openSuccess } = useUI();
+  const { openSuccess, refCode } = useUI();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [car, setCar] = useState("");
@@ -42,6 +42,7 @@ export default function ApplyForm() {
       phone,
       car: car.trim() || undefined,
       source: "form",
+      ref: refCode,
     });
     setSubmitting(false);
 
@@ -156,8 +157,8 @@ function Field({
   );
 }
 
-/** 개인정보 수집·이용 동의 안내 + 체크박스 (본문 폼/공용) */
-export function ConsentBox({
+/** 개인정보 수집·이용 동의 안내 + 체크박스 (본문 폼 내부 전용) */
+function ConsentBox({
   checked,
   onChange,
   error,

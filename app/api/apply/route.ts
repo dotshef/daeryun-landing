@@ -1,19 +1,14 @@
 import { NextResponse } from "next/server";
+import { Resend } from "resend";
+import { getRecipient, REFS, type Recipient } from "@/lib/data";
 
-/**
- * 신청 폼 제출 처리.
- *
- * 오픈 이슈(발주처 확인 필요): 최종 수신 채널 미정.
- * 1차 배포는 서버 콘솔 로깅으로 시작하고, 아래 옵션을 환경변수로 켜서 확장한다.
- *   - APPLY_WEBHOOK_URL : 텔레그램/슬랙/카톡 알림 등 웹훅 POST
- * 채널 확정 후 여기서 이메일/시트/알림 연동을 추가하면 된다.
- */
 
 type Body = {
   name?: unknown;
   phone?: unknown;
   car?: unknown;
   source?: unknown;
+  ref?: unknown;
 };
 
 const isValidPhone = (v: string) => /^010\d{8}$/.test(v.replace(/\D/g, ""));
@@ -30,6 +25,7 @@ export async function POST(req: Request) {
   const phone = typeof body.phone === "string" ? body.phone.trim() : "";
   const car = typeof body.car === "string" ? body.car.trim() : "";
   const source = body.source === "quickbar" ? "quickbar" : "form";
+  const ref = typeof body.ref === "string" ? body.ref : "";
 
   if (name.length < 2 || !isValidPhone(phone)) {
     return NextResponse.json(
@@ -38,32 +34,62 @@ export async function POST(req: Request) {
     );
   }
 
+  // ref 가 유효하지 않아도 리드를 잃지 않도록 기본 담당자로 폴백
+  const recipient: Recipient = getRecipient(ref) ?? getRecipient(REFS[0])!;
+
   const lead = {
     name,
     phone,
     car: car || null,
     source,
+    ref: ref || REFS[0],
+    assignedTo: recipient.name,
     receivedAt: new Date().toISOString(),
     ua: req.headers.get("user-agent") ?? null,
   };
 
-  // 1차: 서버 로깅 (Vercel 로그에서 확인 가능)
+  // 항상 서버 로깅 (이메일 실패 시에도 리드 유실 방지)
   console.log("[apply] new lead", JSON.stringify(lead));
 
-  // 선택: 웹훅으로 실시간 알림 전달
-  const webhook = process.env.APPLY_WEBHOOK_URL;
-  if (webhook) {
-    try {
-      await fetch(webhook, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(lead),
-      });
-    } catch (err) {
-      // 알림 실패가 접수 자체를 실패시키지 않도록 로깅만 한다
-      console.error("[apply] webhook failed", err);
-    }
-  }
+  await sendMail(recipient, lead);
 
   return NextResponse.json({ ok: true });
+}
+
+async function sendMail(recipient: Recipient, lead: Record<string, unknown>) {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    console.warn("[apply] RESEND_API_KEY 미설정 — 이메일 발송 생략(로깅만)");
+    return;
+  }
+
+  const from = process.env.RESEND_FROM ?? "대륜 리드 <onboarding@resend.dev>";
+
+  try {
+    const resend = new Resend(apiKey);
+    const { data, error } = await resend.emails.send({
+      from,
+      to: recipient.email,
+      subject: `[대륜 접수] ${lead.name} / ${lead.phone}`,
+      text: [
+        `담당자: ${recipient.name}`,
+        `이름: ${lead.name}`,
+        `연락처: ${lead.phone}`,
+        `차종: ${lead.car ?? "-"}`,
+        `유입경로: ${lead.source} (${lead.ref})`,
+        `접수시각: ${lead.receivedAt}`,
+      ].join("\n"),
+    });
+
+    if (error) {
+      console.error(
+        `[apply] resend error: ${error.name} - ${error.message}`
+      );
+      return;
+    }
+    console.log(`[apply] email sent id=${data?.id} to=${recipient.email}`);
+  } catch (err) {
+    // 네트워크 등 예외
+    console.error("[apply] resend threw", err);
+  }
 }

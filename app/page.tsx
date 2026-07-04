@@ -1,46 +1,18 @@
-import { SECTIONS } from "@/lib/constants";
-import UIProvider from "@/components/UIProvider";
-import Ticker from "@/components/Ticker";
-import SectionImage from "@/components/SectionImage";
-import Faq from "@/components/Faq";
-import TrustBar from "@/components/TrustBar";
-import ApplyForm from "@/components/ApplyForm";
-import QuickBar from "@/components/QuickBar";
-import FloatingButtons from "@/components/FloatingButtons";
+import type { Metadata } from "next";
+import { pickRandomRef, RECIPIENTS } from "@/lib/data";
+import Landing from "@/components/Landing";
+
+// 요청마다 랜덤 담당자를 선택해야 하므로 정적 생성하지 않는다.
+export const dynamic = "force-dynamic";
+
+// 루트가 색인 대상(정규 URL). 서브페이지는 noindex 처리된다.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
-  // 이미지 01~10은 연속 배치, FAQ는 10과 11 사이, 11 뒤에 신뢰배지 → 신청 폼
-  const first10 = SECTIONS.slice(0, 10);
-  const section11 = SECTIONS[10];
-
-  return (
-    <UIProvider>
-      <Ticker />
-
-      <main className="mx-auto w-full max-w-[480px] bg-white">
-        {/* 이미지 01~10 (사이 요소 없이 연속) */}
-        {first10.map((s, i) => (
-          <SectionImage key={s.src} data={s} index={i} priority={i === 0} />
-        ))}
-
-        {/* FAQ 아코디언 */}
-        <Faq />
-
-        {/* 이미지 11 — 최종 CTA (앵커) */}
-        <SectionImage data={section11} index={10} />
-
-        {/* 신뢰 배지 바 */}
-        <TrustBar />
-
-        {/* 본문 유일 신청 폼 */}
-        <ApplyForm />
-
-        {/* 하단 고정 퀵바에 콘텐츠가 가리지 않도록 여백 (폼과 같은 배경으로 이어지게) */}
-        <div className="h-28 bg-slate-900" aria-hidden />
-      </main>
-
-      <FloatingButtons />
-      <QuickBar />
-    </UIProvider>
-  );
+  // 리드 균등 분배 — 리다이렉트 없이 랜덤 담당자로 바로 렌더 (LCP 유리)
+  const ref = pickRandomRef();
+  const { phone } = RECIPIENTS[ref];
+  return <Landing phone={phone} refCode={ref} />;
 }

@@ -1,13 +1,14 @@
 "use client";
 
-import { PHONE_NUMBER } from "@/lib/constants";
+import { useUI } from "./UIProvider";
 
 /**
  * 우측 하단 플로팅 전화 상담 버튼.
  * 하단 퀵 접수 바(약 88px)에 가리지 않도록 위쪽으로 띄운다.
  */
 export default function FloatingButtons() {
-  const telHref = `tel:${PHONE_NUMBER.replace(/[^0-9+]/g, "")}`;
+  const { phone } = useUI();
+  const telHref = `tel:${phone.replace(/[^0-9+]/g, "")}`;
 
   return (
     <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">

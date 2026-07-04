@@ -5,6 +5,8 @@ export type ApplyPayload = {
   phone: string;
   car?: string;
   source: "form" | "quickbar";
+  /** 수신 담당자 식별자 (js/yj/jh) */
+  ref: string;
 };
 
 /** 숫자만 남기고 010-0000-0000 형태로 하이픈 자동 삽입 */

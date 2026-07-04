@@ -1,9 +1,7 @@
 // 대륜 1급 공업사 랜딩 — 전역 상수 데이터
 // 오픈 이슈(발주처 확인 필요) 값은 환경변수로도 덮어쓸 수 있게 처리한다.
 
-/** 전화 상담 번호 (tel: 링크용). 실제 번호로 교체 필요 */
-export const PHONE_NUMBER =
-  process.env.NEXT_PUBLIC_PHONE_NUMBER ?? "1600-0000";
+// 담당자별 전화번호·이메일은 lib/data.ts(서버 전용)에서 관리한다.
 
 /** 브랜드명 */
 export const BRAND = "대륜";

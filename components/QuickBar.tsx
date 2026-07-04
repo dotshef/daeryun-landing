@@ -11,7 +11,7 @@ import {
 
 /** 하단 고정 퀵 접수 바 — 스크롤 내내 따라다니는 간편 접수 */
 export default function QuickBar() {
-  const { openSuccess } = useUI();
+  const { openSuccess, refCode } = useUI();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
@@ -31,6 +31,7 @@ export default function QuickBar() {
       name: name.trim(),
       phone,
       source: "quickbar",
+      ref: refCode,
     });
     setSubmitting(false);
 

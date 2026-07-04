@@ -14,6 +14,10 @@ import ExitModal from "./ExitModal";
 type UIContextValue = {
   /** 접수 완료 모달 표시 */
   openSuccess: () => void;
+  /** 담당자 전화번호 (플로팅 전화 버튼 / tel:) */
+  phone: string;
+  /** 담당자 식별자 (폼 제출 시 수신처 결정) */
+  refCode: string;
 };
 
 const UIContext = createContext<UIContextValue | null>(null);
@@ -27,8 +31,12 @@ export function useUI(): UIContextValue {
 const EXIT_SHOWN_KEY = "daeryun_exit_shown";
 
 export default function UIProvider({
+  phone,
+  refCode,
   children,
 }: {
+  phone: string;
+  refCode: string;
   children: React.ReactNode;
 }) {
   const [successOpen, setSuccessOpen] = useState(false);
@@ -74,7 +82,7 @@ export default function UIProvider({
   }, []);
 
   return (
-    <UIContext.Provider value={{ openSuccess }}>
+    <UIContext.Provider value={{ openSuccess, phone, refCode }}>
       {children}
       <SuccessModal open={successOpen} onClose={() => setSuccessOpen(false)} />
       <ExitModal open={exitOpen} onClose={() => setExitOpen(false)} />
