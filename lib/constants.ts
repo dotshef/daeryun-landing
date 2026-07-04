@@ -9,15 +9,11 @@ export const PHONE_NUMBER =
 export const BRAND = "대륜";
 
 export type SectionImage = {
-  /** public/images 하위 파일명 */
   src: string;
-  /** 접근성/SEO용 대체 텍스트 (섹션 핵심 카피) */
   alt: string;
-  /** 클릭 시 신청 폼으로 이동하는 앵커 섹션 여부 */
   anchor?: boolean;
 };
 
-/** 섹션 이미지 01~11 (레퍼런스 순서 그대로) */
 export const SECTIONS: SectionImage[] = [
   {
     src: "/images/section-01.webp",
@@ -69,7 +65,6 @@ export const SECTIONS: SectionImage[] = [
 
 export type TickerItem = { name: string; car: string; minutesAgo: number };
 
-/** 실시간 접수 티커 목업 데이터 (이름 마스킹) */
 export const TICKER_ITEMS: TickerItem[] = [
   { name: "김○○", car: "소나타", minutesAgo: 3 },
   { name: "이○○", car: "그랜저", minutesAgo: 5 },
@@ -87,7 +82,6 @@ export const TICKER_ITEMS: TickerItem[] = [
 
 export type FaqItem = { q: string; a: string };
 
-/** FAQ 6문항 (레퍼런스 원문, 브랜드명만 대륜으로 교체) */
 export const FAQ_ITEMS: FaqItem[] = [
   {
     q: "정말 수리비가 0원인가요?",
@@ -117,7 +111,6 @@ export const FAQ_ITEMS: FaqItem[] = [
 
 export type TrustBadge = { highlight: string; label: string };
 
-/** 신뢰 배지 바 4개 */
 export const TRUST_BADGES: TrustBadge[] = [
   { highlight: "1급", label: "공업사 인증" },
   { highlight: "20년+", label: "수리 경력" },

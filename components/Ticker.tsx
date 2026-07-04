@@ -17,7 +17,7 @@ export default function Ticker() {
           실시간 접수
         </div>
         <div className="relative flex-1 overflow-hidden">
-          <div className="flex whitespace-nowrap animate-ticker">
+          <div className="flex w-max whitespace-nowrap animate-ticker">
             {loop.map((item, i) => (
               <span
                 key={i}
