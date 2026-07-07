@@ -63,7 +63,7 @@ async function sendMail(recipient: Recipient, lead: Record<string, unknown>) {
     return;
   }
 
-  const from = process.env.RESEND_FROM ?? "대륜 리드 <onboarding@resend.dev>";
+  const from = process.env.RESEND_FROM ?? "Resend <onboarding@resend.dev>";
 
   try {
     const resend = new Resend(apiKey);

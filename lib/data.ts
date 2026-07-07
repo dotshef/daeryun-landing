@@ -1,29 +1,36 @@
 import "server-only";
 
-export type Ref = "js" | "yj" | "jh" | "cw";
+export type Ref = "js" | "yj" | "jh" | "cw" | "sj";
 
 export type Recipient = { name: string; phone: string; email: string };
 
+// 전화·이메일은 코드에 직접 명시(env 오버라이드 없음).
+// env로 주입하는 값은 RESEND_API_KEY, RESEND_FROM 둘뿐이며 /api/apply 에서 읽는다.
 export const RECIPIENTS: Record<Ref, Recipient> = {
   js: {
     name: "준성",
-    phone: process.env.PHONE_JS ?? "010-3886-5990",
-    email: process.env.EMAIL_JS ?? "toy-wang@naver.com",
+    phone: "010-3886-5990",
+    email: "toy-wang@naver.com",
   },
   yj: {
     name: "윤정",
-    phone: process.env.PHONE_YJ ?? "010-4106-4956",
-    email: process.env.EMAIL_YJ ?? "yunjeong4956@naver.com",
+    phone: "010-4106-4956",
+    email: "yunjeong4956@naver.com",
   },
   jh: {
     name: "지혜",
-    phone: process.env.PHONE_JH ?? "010-7538-9455",
-    email: process.env.EMAIL_JH ?? "similan_@naver.com",
+    phone: "010-7538-9455",
+    email: "similan_@naver.com",
   },
   cw: {
     name: "채원",
-    phone: process.env.PHONE_CW ?? "010-3200-5990",
-    email: process.env.EMAIL_CW ?? "althgksahrma@naver.com",
+    phone: "010-3200-5990",
+    email: "althgksahrma@naver.com",
+  },
+  sj: {
+    name: "시준",
+    phone: "010-7488-8300",
+    email: "sionwer4@naver.com",
   },
 };
 
