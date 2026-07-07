@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import { REFS, getRecipient } from "@/lib/data";
 import Landing from "@/components/Landing";
 
-// js/yj/jh 만 정적 생성하고, 그 외 경로는 404
 export const dynamicParams = false;
 
 export function generateStaticParams() {
