@@ -28,6 +28,11 @@ export default function Landing({
       <Ticker />
 
       <main className="mx-auto w-full max-w-[480px] bg-white">
+        {/* 본문 콘텐츠가 대부분 이미지라 크롤러/스크린리더용 대표 제목을 숨김 처리로 제공 */}
+        <h1 className="sr-only">
+          대륜 1급 공업사 자동차 사고 수리비 0원 이벤트
+        </h1>
+
         {/* 이미지 01~10 (사이 요소 없이 연속) */}
         {first10.map((s, i) => (
           <SectionImage key={s.src} data={s} index={i} priority={i === 0} />
