@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { getRecipient, REFS, type Recipient } from "@/lib/data";
-
+import { isValidName, isValidPhone } from "@/lib/validation";
 
 type Body = {
   name?: unknown;
@@ -10,8 +10,6 @@ type Body = {
   source?: unknown;
   ref?: unknown;
 };
-
-const isValidPhone = (v: string) => /^010\d{8}$/.test(v.replace(/\D/g, ""));
 
 export async function POST(req: Request) {
   let body: Body;
@@ -27,7 +25,7 @@ export async function POST(req: Request) {
   const source = body.source === "quickbar" ? "quickbar" : "form";
   const ref = typeof body.ref === "string" ? body.ref : "";
 
-  if (name.length < 2 || !isValidPhone(phone)) {
+  if (!isValidName(name) || !isValidPhone(phone)) {
     return NextResponse.json(
       { ok: false, error: "validation_failed" },
       { status: 422 }
@@ -70,7 +68,7 @@ async function sendMail(recipient: Recipient, lead: Record<string, unknown>) {
     const { data, error } = await resend.emails.send({
       from,
       to: recipient.email,
-      subject: `[대륜 접수] ${lead.name} / ${lead.phone}`,
+      subject: `[대륜 모터스 고객 접수] ${lead.name} / ${lead.phone}`,
       text: [
         `담당자: ${recipient.name}`,
         `이름: ${lead.name}`,

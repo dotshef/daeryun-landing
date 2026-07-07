@@ -25,7 +25,7 @@ export default function ApplyForm() {
     const e: Errors = {};
     if (!isValidName(name)) e.name = "이름을 정확히 입력해주세요.";
     if (!isValidPhone(phone))
-      e.phone = "010으로 시작하는 연락처를 정확히 입력해주세요.";
+      e.phone = "연락처를 정확히 입력해주세요. (10~11자리)";
     if (!consent) e.consent = "개인정보 수집·이용에 동의해주세요.";
     return e;
   };
