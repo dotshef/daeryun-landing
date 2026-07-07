@@ -1,6 +1,6 @@
 import "server-only";
 
-export type Ref = "js" | "yj" | "jh";
+export type Ref = "js" | "yj" | "jh" | "cw";
 
 export type Recipient = { name: string; phone: string; email: string };
 
@@ -19,6 +19,11 @@ export const RECIPIENTS: Record<Ref, Recipient> = {
     name: "지혜",
     phone: process.env.PHONE_JH ?? "010-7538-9455",
     email: process.env.EMAIL_JH ?? "similan_@naver.com",
+  },
+  cw: {
+    name: "채원",
+    phone: process.env.PHONE_CW ?? "010-3200-5990",
+    email: process.env.EMAIL_CW ?? "althgksahrma@naver.com",
   },
 };
 
