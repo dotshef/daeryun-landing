@@ -1,6 +1,6 @@
 import "server-only";
 
-export type Ref = "js" | "yj" | "jh" | "cw" | "sj";
+export type Ref = "js" | "yj" | "jh" | "cw";
 
 export type Recipient = { name: string; phone: string; email: string };
 
@@ -26,11 +26,6 @@ export const RECIPIENTS: Record<Ref, Recipient> = {
     name: "채원",
     phone: "010-3200-5990",
     email: "althgksahrma@naver.com",
-  },
-  sj: {
-    name: "시준",
-    phone: "010-7488-8300",
-    email: "sionwer4@naver.com",
   },
 };
 
