@@ -7,6 +7,7 @@ import TrustBar from "./TrustBar";
 import ApplyForm from "./ApplyForm";
 import QuickBar from "./QuickBar";
 import FloatingButtons from "./FloatingButtons";
+import StructuredData from "./StructuredData";
 
 /**
  * 랜딩 페이지 뷰(공통) — 콘텐츠는 모든 버전 동일.
@@ -25,6 +26,7 @@ export default function Landing({
 
   return (
     <UIProvider phone={phone} refCode={refCode}>
+      <StructuredData />
       <Ticker />
 
       <main className="mx-auto w-full max-w-[480px] bg-white">
