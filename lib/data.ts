@@ -38,7 +38,3 @@ export function isRef(v: string): v is Ref {
 export function getRecipient(ref: string): Recipient | null {
   return isRef(ref) ? RECIPIENTS[ref] : null;
 }
-
-export function pickRandomRef(): Ref {
-  return REFS[Math.floor(Math.random() * REFS.length)];
-}
